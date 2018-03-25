@@ -1,0 +1,11 @@
+<?xml version='1.0'?>
+<config>
+    <folder>
+        <module>C:\Users\ace\Documents\WindowsPowerShell\Modules\timemaster</module>
+    </folder>
+    <files>
+        <data>data.xml</data>
+    </files>
+    <values>
+    </values>
+</config>
