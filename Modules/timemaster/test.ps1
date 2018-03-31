@@ -6,3 +6,6 @@ $con.ConnectionString = "Data Source=C:\Users\patrick\Documents\WindowsPowerShel
 $sql = $con.CreateCommand()
 $sql.CommandText = "Select * from testtab"
 $adapter = New-Object -TypeName System.Data.SQLite.SQLiteDataAdapter $sql
+$data = New-Object System.Data.DataSet
+[void]$adapter.Fill($data)
+$data.Tables.rows
