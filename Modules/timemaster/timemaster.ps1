@@ -1,12 +1,23 @@
-function get-moduleFolder {
+$moduleFolder = "";
+$dataFile = "";
+
+function get-modulePath {
+    param(
+        [switch]$folder,
+        [switch]$dataFile, 
+        [switch]$configFile
+    )
+    
     $config = ( [xml] (gc config.xml));   
-    return $config.config.folder;
+    if($folder.IsPresent) {
+        return $config.config.folder;
+    } 
+    if($dataFile.IsPresent) {
+        return $config.config.files.data;
+    }
 }
-
-function get-DataFile
-
-
-get-moduleFolder
+get-modulePath -folder
+get-modulePath -dataFile
 
 
 function create-xml-file {
