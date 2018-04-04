@@ -2,10 +2,10 @@
 <config>
     <folder>
         <module>C:\Users\ace\Documents\WindowsPowerShell\Modules\timemaster</module>
+        <data-provider>C:\Users\ace\Documents\WindowsPowerShell\Modules\timemaster\data-provider</data-provider>
     </folder>
     <files>
-        <data>data.xml</data>
+        <data>tracking-data.db</data>
+        <data-provider>System.Data.SQLite.dll</data-provider>
     </files>
-    <values>
-    </values>
 </config>

@@ -1,35 +1,45 @@
 <#
 Todo: 
 * Das DB Framework einbinden
-* Es müssen Datumswerte gespeichert und passend wieder ausgelesen werden.
+* Es mï¿½ssen Datumswerte gespeichert und passend wieder ausgelesen werden.
 * Es muss die Differenz zwischen diesen Datumswerten berechnet werden. 
 
-* Plausi Prüfungen einbauen. 
-- Es muss für jeden Tag ein Feierabend angegeben werden. Wenn es der Tag danach ist und noch keine Feierabend angegeben wurde wird nach der Zeit gefragt.
-* In der Tabelle muss es ein Boolean flag für die aktive Aufgabe geben. 
+* Plausi Prï¿½fungen einbauen. 
+- Es muss fï¿½r jeden Tag ein Feierabend angegeben werden. Wenn es der Tag danach ist und noch keine Feierabend angegeben wurde wird nach der Zeit gefragt.
+* In der Tabelle muss es ein Boolean flag fï¿½r die aktive Aufgabe geben. 
 * Wenn tim mit einer Aufgabe gestartet und dann wird tim mit einer 
 anderen Aufgabe gestartet, dann wird die erste Aufgabe beendet. 
 (Es kann nur eine aktive Aufgabe geben).  
 
-
-
 #>
+#Diese Function setzt in der config.xml die Angaben zum Modulpfad und zur Datenbank
 
+ . .\db-framework.ps1
 
 function track {
     param(
         [parameter(Mandatory=$True)][String]$text
     )
+    $currentDatetime = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+    $activeId = execute-singleResultQuery "select id from trackingdata where active = 1"
+    #Es existiert eine active Task
+    if($activeId -ne $false) {
+        execute-command "update trackingdata set active = 0 where id = $activeId"
+        execute-command "update trackingdata set end = '$currentDatetime' where id = $activeId"
+    }
+    #Die neue aktive Task wird gesetzt 
+    $command = "insert into trackingdata(description, start, active) values('$text', '$currentDatetime', 1)"
+    execute-command $command
     
-    $start = Get-Date -Format "dd-MM-yyyy HH:mm"
-    $start
-
-    $command = "insert into tracking-data values"
-
-
-
-    "test"+$text
 }
 
-track "1234"
-track
+function get-data {
+    #alle getrackten Zeilen ausgeben
+}
+
+function finish-day {
+    #alles inaktiv
+    #bei letzte task stop setzen
+    #Tagesübersicht aufrufen
+}
+

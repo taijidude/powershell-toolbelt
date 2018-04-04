@@ -1,26 +1,23 @@
 <# Work with That... https://social.technet.microsoft.com/wiki/contents/articles/30562.powershell-accessing-sqlite-databases.aspx
-Diese Datei enthält ein paar Funktionen, die den Zugriff auf die SQlite Datenbank kapseln, folgende Funktionen gibt es: 
+Diese Datei enthï¿½lt ein paar Funktionen, die den Zugriff auf die SQlite Datenbank kapseln, folgende Funktionen gibt es: 
 1. 
 2. 
 3. 
 4. 
 TODO's
 - Die Ausgabe des in der Function execute-query muss formatiert werden
-- Die Methode init-con und cleanup dürfen nur von Functionen in diesem Framework benutzt werden. 
+- Die Methode init-con und cleanup dï¿½rfen nur von Functionen in diesem Framework benutzt werden. 
 - Das Script muss ein Modul werden
 - Wir brauchen eine Print Methode um die Ausgabe der Tabellen zu formatieren
-- Wir müssen die Pfad setzen 
-- Es muss eine Methode geben, die prüft ob die Datenbank vorhanden ist.
-
-
+- Wir mï¿½ssen die Pfad setzen 
+- Es muss eine Methode geben, die prï¿½ft ob die Datenbank vorhanden ist.
 #>
 
-$providerPath = "c:\Users\ace\Documents\WindowsPowerShell\powershell-toolbelt\Modules\timemaster\data-provider\System.Data.SQLite.dll"
-$databasePath = "datasource=c:\Users\ace\Documents\WindowsPowerShell\powershell-toolbelt\Modules\timemaster\tracking-data.db"
-
-Add-Type -Path $providerPath
 
 function init-con {
+    $providerPath = "C:\Users\patrick\Documents\WindowsPowerShell\Scripts\powershell-toolbelt\Modules\timemaster\data-provider\System.Data.SQLite.dll"
+    $databasePath = "datasource=C:\Users\patrick\Documents\WindowsPowerShell\Scripts\powershell-toolbelt\Modules\timemaster\tracking-data.db"
+    Add-Type -Path $providerPath
     $con = New-Object -TypeName System.Data.SQLite.SQLiteConnection
     $con.ConnectionString = $databasePath
     $con.Open()
@@ -32,29 +29,48 @@ function cleanup {
     $con.Close()
 }
 
-
 function execute-query {
-    param([string]$query)
+    param(
+        [parameter(Mandatory=$True)][string]$text
+    )
     $con = init-con
     $sql = $con.CreateCommand()
-    $sql.CommandText = $query
+    $sql.CommandText = $text
     $adapter = New-Object -TypeName System.Data.SQLite.SQLiteDataAdapter $sql
     $data = New-Object System.Data.DataSet
     [void]$adapter.Fill($data)    
     cleanup $sql $con
-    #$data.Tables.rows
     return $data
 }
 
+function execute-singleResultQuery {
+    param(
+        [parameter(Mandatory=$True)][string]$text
+    )
+    $data = execute-query "select id from trackingdata where active = 1"
+    $rows = $data.Tables.rows
+    $length = $data.Tables.rows.Length
+    if($length -gt 1) {
+        throw "More than one row returned"
+
+    } elseif($length -eq 0) {
+        return $false;
+    } else {
+        return $rows[0]
+    }
+}
+
 function execute-command {
+    param(
+        [parameter(Mandatory=$True)][string]$text
+    )
     $con = init-con
     $sql = $con.CreateCommand()
-    $sql.CommandText = $query
-    $sql.ExecuteNonQuery()
+    $sql.CommandText = $text
+    [void]$sql.ExecuteNonQuery()
     cleanup $sql $con
 }
 
-$data = execute-query "Select * from testtab;"
-$data.Tables.rows
+#$data.Tables.rows
 
 
