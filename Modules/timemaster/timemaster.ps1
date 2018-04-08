@@ -43,6 +43,11 @@ function track {
     #Die neue aktive Task wird gesetzt 
     $command = "insert into trackingdata(description, start, active) values('$text', '$currentDatetime', 1)"
     execute-command $command
+	#Es sollte hier eine RÃ¼ckmeldung geben
+	"[INFO]$text wird getrackt..."
+	
+	
+	
 }
 
 function get-data {
@@ -72,4 +77,3 @@ function finish-day {
     #Tagesübersicht aufrufen
 }
 
-get-data

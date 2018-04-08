@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <configurations>
     <config name="netbook">
-        <provider>C:\Users\ace\Documents\WindowsPowerShell\Modules\timemaster\data-provider\System.Data.SQLite.dll</data-provider>
+        <provider>C:\Users\ace\Documents\WindowsPowerShell\powershell-toolbelt\Modules\timemaster\data-provider\System.Data.SQLite.dll</provider>
 		<database>datasource=C:\Users\ace\Documents\WindowsPowerShell\powershell-toolbelt\Modules\timemaster\tracking-data.db</database>
 	</config>
 	<config name="desktop">
