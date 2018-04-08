@@ -15,11 +15,12 @@ TODO's
 
 
 function init-con {
-    $providerPath = "C:\Users\patrick\Documents\WindowsPowerShell\Scripts\powershell-toolbelt\Modules\timemaster\data-provider\System.Data.SQLite.dll"
-    $databasePath = "datasource=C:\Users\patrick\Documents\WindowsPowerShell\Scripts\powershell-toolbelt\Modules\timemaster\tracking-data.db"
-    Add-Type -Path $providerPath
+    $config  = [xml](gc .\config.xml)
+	#Ich könnte auf jedem Rechner eine Umgebunsvarible einrichten? Und diese Variabe steuert dann die Konfiguration
+	$config = $config.SelectSingleNode('//configurations/config[@name="netbook"]')	
+	Add-Type -Path $config.provider
     $con = New-Object -TypeName System.Data.SQLite.SQLiteConnection
-    $con.ConnectionString = $databasePath
+    $con.ConnectionString = $config.database
     $con.Open()
     return $con
 }
@@ -70,7 +71,3 @@ function execute-command {
     [void]$sql.ExecuteNonQuery()
     cleanup $sql $con
 }
-
-#$data.Tables.rows
-
-

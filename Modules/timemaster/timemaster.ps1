@@ -16,6 +16,19 @@ anderen Aufgabe gestartet, dann wird die erste Aufgabe beendet.
 
  . .\db-framework.ps1
 
+function formatOutput {
+	param(
+		[string]$value
+	)
+	
+	if(!$value) {
+		$value = "";
+	}
+
+	$value = $value.PadRight(20)
+	return $value
+} 
+ 
 function track {
     param(
         [parameter(Mandatory=$True)][String]$text
@@ -30,11 +43,27 @@ function track {
     #Die neue aktive Task wird gesetzt 
     $command = "insert into trackingdata(description, start, active) values('$text', '$currentDatetime', 1)"
     execute-command $command
-    
 }
 
 function get-data {
-    #alle getrackten Zeilen ausgeben
+	$result = execute-query "select * from trackingdata"
+	$header = null;
+	$output = New-Object System.Collections.ArrayList
+	$startoutput = "==== Timemaster: All recorded data ====";
+	$endoutput = "====================================="
+	
+	$result.tables.rows |  %{   
+		$description = formatOutput $_.description 
+		$start =  formatOutput $_.start
+		$end =  formatOutput $_.end 	
+		$output.add("| $description | $start | $end |") 
+	}
+	
+	$startoutput
+	foreach ($item in $output) {
+		$item
+	}
+	$endoutput
 }
 
 function finish-day {
@@ -43,3 +72,4 @@ function finish-day {
     #Tagesübersicht aufrufen
 }
 
+get-data
