@@ -44,10 +44,7 @@ function track {
     $command = "insert into trackingdata(description, start, active) values('$text', '$currentDatetime', 1)"
     execute-command $command
 	#Es sollte hier eine Rückmeldung geben
-	"[INFO]$text wird getrackt..."
-	
-	
-	
+	"[INFO]$text wird getrackt..."	
 }
 
 function get-data {

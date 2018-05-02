@@ -56,7 +56,7 @@ function execute-singleResultQuery {
 
     } elseif($length -eq 0) {
         return $false;
-    } else {
+    } else { 
         return $rows[0]
     }
 }
